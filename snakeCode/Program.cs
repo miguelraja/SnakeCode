@@ -5,6 +5,7 @@ using System.Threading;
 
 namespace snakeCode
 {
+    public enum Directions {UP, DOWN, LEFT, RIGHT};
     public class Position
     {
         public int X { get; set; }
@@ -26,7 +27,7 @@ namespace snakeCode
         public List<Position> Body { get; private set; } = new List<Position>();
         public Position Head => Body.Last();
         public ConsoleColor Color { get; set; } = ConsoleColor.Red;
-        public string Direction { get; set; } = "RIGHT";
+        public Directions Direction { get; set; } = Directions.RIGHT;
 
         public Snake(int startX, int startY)
         {
@@ -39,10 +40,10 @@ namespace snakeCode
 
             switch (Direction)
             {
-                case "UP": newHead.Y--; break;
-                case "DOWN": newHead.Y++; break;
-                case "LEFT": newHead.X--; break;
-                case "RIGHT": newHead.X++; break;
+                case Directions.UP: newHead.Y--; break;
+                case Directions.DOWN: newHead.Y++; break;
+                case Directions.LEFT: newHead.X--; break;
+                case Directions.RIGHT: newHead.X++; break;
             }
             Body.Add(newHead);
         }
@@ -83,7 +84,7 @@ namespace snakeCode
             {
                 Draw();
                 Input();
-                Logic();
+                CheckSnakeColissions();
             }
             ShowGameOver();
         }
@@ -129,17 +130,17 @@ namespace snakeCode
                     var key = Console.ReadKey(true).Key;
                     _snake.Direction = key switch
                     {
-                        ConsoleKey.UpArrow when _snake.Direction != "DOWN" => "UP",
-                        ConsoleKey.DownArrow when _snake.Direction != "UP" => "DOWN",
-                        ConsoleKey.LeftArrow when _snake.Direction != "RIGHT" => "LEFT",
-                        ConsoleKey.RightArrow when _snake.Direction != "LEFT" => "RIGHT",
+                        ConsoleKey.UpArrow when _snake.Direction != Directions.DOWN => Directions.UP,
+                        ConsoleKey.DownArrow when _snake.Direction != Directions.UP => Directions.DOWN,
+                        ConsoleKey.LeftArrow when _snake.Direction != Directions.RIGHT => Directions.LEFT,
+                        ConsoleKey.RightArrow when _snake.Direction != Directions.LEFT => Directions.RIGHT,
                         _ => _snake.Direction
                     };
                 }
             }
         }
 
-        private void Logic()
+        private void CheckSnakeColissions()
         {
             _snake.Move();
 
