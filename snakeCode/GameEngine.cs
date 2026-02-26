@@ -7,6 +7,7 @@ namespace snakeCode{
         private const int Height = 16;
         private int _score = 5;
         private bool _gameOver = false;
+        private int _gameSpeed = 500;
 
         private Snake _snake = new Snake(Width / 2, Height / 2);
         private Berry _berry = new Berry();
@@ -60,7 +61,7 @@ namespace snakeCode{
         private void Input()
         {
             DateTime start = DateTime.Now;
-            while ((DateTime.Now - start).TotalMilliseconds < 500)
+            while ((DateTime.Now - start).TotalMilliseconds < _gameSpeed)
             {
                 if (Console.KeyAvailable)
                 {
@@ -92,6 +93,7 @@ namespace snakeCode{
             {
                 _score++;
                 _berry.Randomize(Width, Height);
+                _gameSpeed -= 10;
             }
 
             _snake.TrimTail(_score);
